@@ -1,0 +1,45 @@
+#TELEPHONE_DIRECTORY_GUVI
+#CRUD_OPS
+
+import pymongo
+client = pymongo.MongoClient("mongodb://127.0.0.1:27017")
+my_dbs = client.list_database_names()
+print(my_dbs)
+
+#CREATE
+
+db = client['TELEPHONE DIRECTORY']
+students = db['students']
+
+#INSERT
+
+student_info = [{"Name" : "Pratham", "Phone Number" : "123456", "Place" : "Mumbai"},
+                {"Name" : "Ash", "Phone Number" : "789012", "Place" : "Pune"},
+                {"Name" : "Master", "Phone Number" : "170697", "Place" : "Chennai"}
+                ]
+student_data = students.insert_many(student_info)
+print(student_data.inserted_ids)
+
+#FIND
+
+for document in students.find():
+    print(document)
+
+for document in students.find({"Place":"Pune"}):
+    print(document)
+
+#UPDATE
+
+Old_data = {"Name":"Pratham","Place":"Mumbai"}
+New_data = {"$set":{"Name":"Prathamesh","Place":"Navi Mumbai"}}
+students.update_one(Old_data,New_data)
+
+for document in students.find():
+    print(document)
+
+#DELETE
+
+students.delete_one({"Name":"Ash"})
+for document in students.find():
+    print(document)
+
